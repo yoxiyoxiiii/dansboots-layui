@@ -1,0 +1,7 @@
+server:
+  port: 8099
+spring:
+  thymeleaf:
+    cache: false
+    enabled: true
+    mode: LEGACYHTML5
