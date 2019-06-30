@@ -41,4 +41,9 @@ public class DansbootsLayuiApplication {
      return map;
     }
 
+    @RequestMapping("demo/table")
+    public String table() {
+        return "demo/tab";
+    }
+
 }
