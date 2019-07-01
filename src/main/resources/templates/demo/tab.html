@@ -36,6 +36,7 @@
 <!--</div>-->
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
     <legend>动态操作Tab</legend>
+    <input th:value="${#httpServletRequest.getServerName()}">
 </fieldset>
 
 <div class="layui-tab" lay-filter="demo" lay-allowclose="true">
@@ -72,7 +73,7 @@
                 //新增一个Tab项
                 element.tabAdd('demo', {
                     title: '新选项'+ (Math.random()*1000|0) //用于演示
-                    ,content: '内容'+ (Math.random()*1000|0)
+                    ,content: '<iframe th:src="">'
                     ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
                 })
             }
