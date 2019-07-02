@@ -1,6 +1,8 @@
 package com.dans.dansboot;
 
 import com.dans.dansboot.entity.UserEntity;
+import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration;
@@ -15,6 +17,7 @@ import java.util.Map;
 
 @Controller
 @SpringBootApplication
+@MapperScan(basePackages = {"com.dans.dansboot.mapper"})
 public class DansbootsLayuiApplication {
 
     public static void main(String[] args) {
