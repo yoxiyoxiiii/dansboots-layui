@@ -1,11 +1,14 @@
 package com.dans.dansboot.utils;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 结果集返回
  * @param <T>
  */
+@Data
 public class Result<T> implements Serializable {
    private T data;
    private String msg;

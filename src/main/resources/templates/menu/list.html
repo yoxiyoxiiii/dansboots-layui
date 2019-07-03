@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div  style="padding-left: 20px" th:fragment="content">
+    <table id="menuListTable" class="layui-table"></table>
+</div>
+<div th:replace="/layout/script::js_footer(~{::title},~{::script})"></div>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        //第一个实例
+        var init = table.render({
+            elem: '#menuListTable'
+            ,url: '/api/menu/list' //数据接口
+            ,page: true //开启分页
+            ,cols: [
+                [ //表头
+                     {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                    ,{field: 'name', title: '菜单名', width:80}
+                    ,{field: 'url', title: '地址', width:80, sort: true}
+                    ,{field: 'level', title: '层级', width:80}
+                    ,{field: 'path', title: '路径', width: 177}
+                    ,{field: 'type', title: '类型', width: 80, sort: true}
+                ]
+            ]
+        });
+        //table.exportFile(init.config.id, data); //data 为该实例中的任意数量的数据
+
+    });
+
+</script>
+</body>
+</html>

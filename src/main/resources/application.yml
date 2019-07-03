@@ -13,3 +13,5 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       connection-test-query: SELECT 1
+mybatis-plus:
+  mapper-locations: classpath:/com/dans/dansboot/mapper/*.xml

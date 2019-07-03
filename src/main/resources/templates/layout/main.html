@@ -22,7 +22,7 @@
 </body>
 <script>
     var tabArr = [];
-    function addTab(id,title, url) {
+    function addTab(id,title,url) {
         layui.use('element', function () {
             var $ = layui.jquery
                 ,element = layui.element;
@@ -33,7 +33,7 @@
             }
             element.tabAdd('lay-filter',{
                 title: title
-                ,content: '<iframe  id="iframepage" width="100%" scrolling="no" src="http://www.baidu.com" frameborder="0" onload="changeFrameHeight()">'
+                ,content: '<iframe  id="iframepage" width="100%" scrolling="no" src='+url+'  frameborder="0" onload="changeFrameHeight()">'
                 ,id: id //实际使用一般是规定好的id，这里以时间戳模拟下
             });
             tabArr.push(id);
@@ -95,5 +95,5 @@
     }
 </script>
 
-<div th:replace="layout/script::js_footer(~{::title},~{::script})"></div>
+<div th:replace="/layout/script::js_footer(~{::title},~{::script})"></div>
 </html>
