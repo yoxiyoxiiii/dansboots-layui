@@ -1,12 +1,15 @@
 package com.dans.dansboot;
 
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.dans.dansboot.entity.UserEntity;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,6 +20,7 @@ import java.util.Map;
 
 @Controller
 @SpringBootApplication
+@EnableTransactionManagement
 @MapperScan(basePackages = {"com.dans.dansboot.mapper"})
 public class DansbootsLayuiApplication {
 
@@ -24,6 +28,10 @@ public class DansbootsLayuiApplication {
         SpringApplication.run(DansbootsLayuiApplication.class, args);
     }
 
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
+    }
     @RequestMapping("/index")
     public String index() {
         return "index";

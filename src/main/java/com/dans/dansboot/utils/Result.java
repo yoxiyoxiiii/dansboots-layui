@@ -22,8 +22,12 @@ public class Result<T> implements Serializable {
        this.status = status;
    }
 
+   public static<T> Result<T> ok(T data, long count) {
+       return new Result<>(0,"ok",true, data);
+   }
+
    public static<T> Result<T> ok(T data) {
-       return new Result<>(200,"ok",true,data);
+       return new Result<>(200,"ok",true, data);
    }
    public static<T> Result<T> error(int code, String msg) {
        return new Result<>(code,msg,false,null);
