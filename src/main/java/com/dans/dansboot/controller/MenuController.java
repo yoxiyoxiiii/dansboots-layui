@@ -12,6 +12,7 @@ import com.dans.dansboot.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +31,15 @@ public class MenuController {
                                            @RequestParam(required = false) String queryParam
                                            ) {
         IPage<MenuEntity> menuEntityIPage = menuService.pageAndQuery(page, limit,queryParam);
-        return Result.ok(menuEntityIPage);
+        return Result.ok(null,menuEntityIPage);
+    }
+
+    @GetMapping(value = "/treelist")
+    public Result<List<MenuEntity>> treelist (@RequestParam(required = false,defaultValue = "1") Long page,
+                                              @RequestParam(required = false,defaultValue = "10") Long limit,
+                                              @RequestParam(required = false) String queryParam
+                                           ) {
+        IPage<MenuEntity> menuEntityIPage = menuService.pageAndQuery(page, limit,queryParam);
+        return Result.ok(0,menuEntityIPage.getRecords());
     }
 }

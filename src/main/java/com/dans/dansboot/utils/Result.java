@@ -1,6 +1,7 @@
 package com.dans.dansboot.utils;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
@@ -26,8 +27,11 @@ public class Result<T> implements Serializable {
        return new Result<>(0,"ok",true, data);
    }
 
-   public static<T> Result<T> ok(T data) {
-       return new Result<>(200,"ok",true, data);
+   public static<T> Result<T> ok(Integer code ,T data) {
+       if (StringUtils.isEmpty(code)) {
+           return new Result<>(200,"ok",true, data);
+       }
+       return new Result<>(code,"ok",true, data);
    }
    public static<T> Result<T> error(int code, String msg) {
        return new Result<>(code,msg,false,null);

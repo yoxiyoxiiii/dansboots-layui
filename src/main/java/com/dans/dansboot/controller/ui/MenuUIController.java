@@ -12,7 +12,8 @@ public class MenuUIController {
 
     @RequestMapping("list")
     public String list() {
-        return "menu/list";
+//        return "menu/list";
+        return "menu/treeList";
     }
 
 }

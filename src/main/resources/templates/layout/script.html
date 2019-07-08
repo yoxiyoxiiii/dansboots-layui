@@ -10,5 +10,38 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <script>
+        var tabArr = [];
+        function addTab(id, title, url) {
+            layui.use('element', function () {
+                var $ = layui.jquery
+                    , element = layui.element;
+                var index = tabArr.indexOf(id);
+                if (index !== -1) {//判断当前 tab 是否存在
+                    element.tabChange('lay-filter', id);//存在就直接切换，否则就添加
+                    return;
+                }
+                element.tabAdd('lay-filter', {
+                    title: title
+                    ,
+                    content: '<iframe  id="iframepage" width="100%" scrolling="no" src=' + url + '  frameborder="0" onload="changeFrameHeight()">'
+                    ,
+                    id: id //实际使用一般是规定好的id，这里以时间戳模拟下
+                });
+                tabArr.push(id);
+                element.tabChange('lay-filter', id);
+            });
+        }
+
+        function changeFrameHeight() {
+            var ifm = document.getElementById("iframepage");
+            ifm.height = document.documentElement.clientHeight;
+        }
+
+        window.onresize = function () {
+            changeFrameHeight();
+        }
+    </script>
 </div>
 </html>
