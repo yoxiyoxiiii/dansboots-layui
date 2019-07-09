@@ -42,6 +42,6 @@ public class MenuController {
                                               @RequestParam(required = false) String queryParam
                                            ) {
         IPage<MenuEntity> menuEntityIPage = menuService.pageAndQuery(page, limit,queryParam);
-        return Result.ok(0,menuEntityIPage.getRecords());
+        return Result.ok(Result.CodeType.CODE_0,menuEntityIPage.getRecords());
     }
 }

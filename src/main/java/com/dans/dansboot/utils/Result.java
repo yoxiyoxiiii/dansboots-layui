@@ -16,6 +16,12 @@ public class Result<T> implements Serializable {
    private int code;
    private boolean status;
 
+   private Result(CodeType code,String msg,boolean status, T data) {
+       this.code = code.getCode();
+       this.msg = msg;
+       this.data = data;
+       this.status = status;
+   }
    private Result(int code,String msg,boolean status, T data) {
        this.code = code;
        this.msg = msg;
@@ -23,13 +29,28 @@ public class Result<T> implements Serializable {
        this.status = status;
    }
 
-   public static<T> Result<T> ok(T data, long count) {
-       return new Result<>(0,"ok",true, data);
+   public  enum CodeType{
+       CODE_200(200),
+       CODE_0(0),
+       ;
+
+       private int code;
+       CodeType(int code) {
+           this.code = code;
+       }
+
+       public int getCode() {
+           return code;
+       }
    }
 
-   public static<T> Result<T> ok(Integer code ,T data) {
+   public static<T> Result<T> ok(T data, long count) {
+       return new Result<>(CodeType.CODE_0,"ok",true, data);
+   }
+
+   public static<T> Result<T> ok(CodeType code ,T data) {
        if (StringUtils.isEmpty(code)) {
-           return new Result<>(200,"ok",true, data);
+           return new Result<>(code,"ok",true, data);
        }
        return new Result<>(code,"ok",true, data);
    }
