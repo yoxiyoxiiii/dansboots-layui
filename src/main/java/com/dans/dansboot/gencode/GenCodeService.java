@@ -30,11 +30,29 @@ public class GenCodeService {
     @Resource
     private DataSource dataSource;
 
+    /**
+     * 獲取數據庫所有的表
+     * @return
+     * @throws SQLException
+     */
     public List<TableDto> getTableList() throws SQLException {
             Connection connection = dataSource.getConnection();
             DatabaseMetaData metaData = connection.getMetaData();
-            List tableList = getTableList(metaData, connection);
+            List<TableDto> tableList = getTableList(metaData, connection);
             return tableList;
+    }
+
+    /**
+     * 獲取指定表中所有的 列
+     * @param tableName
+     * @return
+     * @throws SQLException
+     */
+    public List<ColumnDto> getColumnList(String tableName) throws SQLException {
+            Connection connection = dataSource.getConnection();
+            DatabaseMetaData metaData = connection.getMetaData();
+        List<ColumnDto> columnList = getColumnList(metaData, connection, tableName);
+        return columnList;
     }
 
     private List<TableDto> getTableList(DatabaseMetaData metaData, Connection connection){
@@ -49,6 +67,7 @@ public class GenCodeService {
                 TableDto tableDto = TableDto.builder().tableName(table_name).build();
                 tableList.add(tableDto);
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -67,9 +86,11 @@ public class GenCodeService {
                 ColumnDto columnDto = ColumnDto.builder().name(column_name).type(type_name).remarks(remarks).build();
                 columnDtos.add(columnDto);
             }
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return columnDtos;
     }
 }

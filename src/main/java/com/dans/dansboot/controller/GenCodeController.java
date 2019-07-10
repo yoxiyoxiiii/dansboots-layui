@@ -1,5 +1,6 @@
 package com.dans.dansboot.controller;
 
+import com.dans.dansboot.domain.dto.ColumnDto;
 import com.dans.dansboot.domain.dto.TableDto;
 import com.dans.dansboot.gencode.GenCodeService;
 import com.dans.dansboot.utils.Result;
@@ -22,5 +23,11 @@ public class GenCodeController {
     public Result<List<TableDto>> list() throws SQLException {
         List<TableDto> tableList = genCodeService.getTableList();
         return Result.ok(tableList, tableList.size());
+    }
+
+    @GetMapping("columnList")
+    public Result<List<ColumnDto>> columnList(String tableName) throws SQLException {
+        List<ColumnDto> columnList = genCodeService.getColumnList(tableName);
+        return Result.ok(columnList, columnList.size());
     }
 }

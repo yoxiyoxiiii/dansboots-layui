@@ -33,8 +33,7 @@
 </script>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-xs" lay-event="gencode">生成代碼</a>
 </script>
 
 <script>
@@ -55,7 +54,7 @@
                      {type: 'checkbox', fixed: 'left'}
                     ,{field: 'tableName', title: '表名'}
                     ,{field: 'remark', title: '注解'}
-                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:200}
                 ]
             ]
         });
@@ -96,6 +95,18 @@
                         email: value
                     });
                     layer.close(index);
+                });
+            } else if (obj.event === 'gencode') {
+                //獲取行數據
+                var  tableName= data.tableName;
+                layer.open({
+                    type: 2,
+                    title: '生成代碼',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['893px', '600px'],
+                    content: '/gencode/gencodeStep?tableName='+tableName,
                 });
             }
         });
