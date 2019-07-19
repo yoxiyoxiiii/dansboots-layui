@@ -19,6 +19,6 @@ public class GenCodeUIController {
     @RequestMapping("gencodeStep")
     public String gencodeStep(@RequestParam String tableName, Model model) {
         model.addAttribute("tableName",tableName);
-        return "gencode/gencodeStep";
+        return "gencode/gencode";
     }
 }

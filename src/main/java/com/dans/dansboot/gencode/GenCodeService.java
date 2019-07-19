@@ -84,6 +84,9 @@ public class GenCodeService {
                 String type_name = columns.getString("TYPE_NAME");
                 String remarks = columns.getString("REMARKS");
                 ColumnDto columnDto = ColumnDto.builder().name(column_name).type(type_name).remarks(remarks).build();
+                //设置java 类型
+                ColumnDtoDecorator columnDtoDecorator = new ColumnDtoDecorator(columnDto);
+                columnDtoDecorator.mysqlColumnType2JavaFiledType(type_name);
                 columnDtos.add(columnDto);
             }
             connection.close();
@@ -93,4 +96,5 @@ public class GenCodeService {
 
         return columnDtos;
     }
+
 }

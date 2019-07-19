@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/header :: common_head(~{::title},~{::link})">
+    <link rel="stylesheet" th:href="@{/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/lay/modules/formSelects-v4/formSelects-v4.css}">
+<body>
+<div  style="padding-left: 20px">
+    <input th:value="${tableName}" hidden="hidden" name="tableName" id="tableName">
+    <table id="menuListTable" class="layui-table" lay-filter="menuListTable"></table>
+</div>
+<script th:src="@{/layui.all.js}"></script>
+<!--<script th:src="@{/lay/modules/formSelects-v4/formSelects-v4.js}"></script>-->
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="gencode">生成代碼</a>
+</script>
+<script type="text/html" id="switchTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{'checked'}}>
+</script>
+<script type="text/javascript">
+    //全局定义一次, 加载formSelects
+    layui.config({
+        base: '/lay/modules' //此处路径请自行处理, 可以使用绝对路径
+    }).extend({
+        formSelects: '/formSelects-v4/formSelects-v4'
+    });
+    //加载模块
+    layui.use(['jquery', 'formSelects'], function(){
+        var formSelects = layui.formSelects;
+    });
+</script>
+<script type="text/html" id="selectTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+<!--    <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="是|否" lay-filter="sexDemo" {{'checked'}}>-->
+<!--    <div class="layui-input-inline">-->
+            <select name="city" xm-select="selectTpl">
+                <option value="1">北京</option>
+                <option value="2">上海</option>
+                <option value="3">广州</option>
+                <option value="4">深圳</option>
+                <option value="5">天津</option>
+            </select>
+<!--    </div>-->
+<!--    <div>-->
+<!--        <select name="city" xm-select="select1">-->
+<!--            <option value="1" disabled="disabled">北京</option>-->
+<!--            <option value="2" selected="selected">上海</option>-->
+<!--            <option value="3">广州</option>-->
+<!--            <option value="4" selected="selected">深圳</option>-->
+<!--            <option value="5">天津</option>-->
+<!--        </select>-->
+<!--    </div>-->
+</script>
+
+
+<script>
+    layui.use(['table', 'layer', 'element', 'jquery', 'form'], function (layer, element,form) {
+        var $ = layui.$;
+        var table = layui.table;
+        var tableName = $("#tableName").val();
+        console.log(tableName);
+        // 监听修改update到表格中
+        form.on('select(testSelect)', function (data) {
+            debugger;
+            var elem = $(data.elem);
+            var trElem = elem.parents('tr');
+            var tableData = table.cache['grid'];
+            // 更新到表格的缓存数据中，才能在获得选中行等等其他的方法中得到更新之后的值
+            tableData[trElem.data('index')][elem.attr('name')] = data.value;
+            // 其他的操作看需求 TODO
+        });
+        $('#getCheckedData').click(function () {
+            debugger;
+            // 验证一下下拉选择之后有没有作用到表格缓存数据
+            var checkStatus = table.checkStatus('grid'); //test即为基础参数id对应的值
+            console.log(checkStatus.data); //获取选中行的数据
+            console.log(checkStatus.data.length); //获取选中行数量，可作为是否有选中行的条件
+            console.log(checkStatus.isAll); //表格是否全选
+        });
+        //第一个实例
+        table.render({
+            elem: '#menuListTable'
+            , toolbar: '#toolbarDemo'
+            , url: '/api/gencode/columnList'//数据接口
+            , method: 'get'
+            , where: {'tableName': tableName}
+            , type: 'json'
+            , page: false //开启分页
+            , id: 'testReload'
+            , done: function (res, curr, count) {
+                count || this.elem.next('.layui-table-view').find('.layui-table-header').css('overflow', 'auto');
+                layui.each($('select'), function (index, item) {
+                    var elem = $(item);
+                    elem.val(elem.data('value')).parents('div.layui-table-cell').css('overflow', 'visible');
+                });
+                form.render();
+            }
+            , cols: [
+                [ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    , {field: 'name', title: '列名'}
+                    , {field: 'type', title: '数据库类型'}
+                    , {field: 'javaType', title: 'java类型'}
+                    , {field: 'show', title: '显示', templet: '#switchTpl', unresize: true}
+                    , {
+                    field: 'queryType', title: '查询类型',
+                    templet: function (d) {
+                        // 模板的实现方式也是多种多样，这里简单返回固定的
+                        return '<select name="city" lay-filter="testSelect" lay-verify="required" data-value="' + d.city + '" >\n' +
+                            '        <option value="">请选择</option>\n' +
+                            '        <option value="1" selected>精确</option>\n' +
+                            '        <option value="2">模糊</option>\n' +
+                            '      </select>';
+                    }
+                }
+                    , {field: 'remark', title: '注解'}
+                    , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 200}
+                ]
+            ]
+        });
+    });
+</script>
+</body>
+</html>

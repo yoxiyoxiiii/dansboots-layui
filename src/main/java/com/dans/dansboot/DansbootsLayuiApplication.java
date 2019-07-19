@@ -34,7 +34,7 @@ public class DansbootsLayuiApplication {
     }
     @RequestMapping("/index")
     public String index() {
-        return "index";
+        return "main";
     }
 
     @RequestMapping("/list")
@@ -55,6 +55,16 @@ public class DansbootsLayuiApplication {
     @RequestMapping("demo/table")
     public String table() {
         return "demo/tab";
+    }
+
+    @RequestMapping("demo/fromSelect")
+    public String fromSelected() {
+        return "demo/fromSelectDemo";
+    }
+
+    @RequestMapping("demo/tableSelected")
+    public String tableSelected() {
+        return "demo/tableSelectedDemo";
     }
 
 }
