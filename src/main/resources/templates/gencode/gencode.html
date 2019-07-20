@@ -9,6 +9,7 @@
     <table id="menuListTable" class="layui-table" lay-filter="menuListTable"></table>
 </div>
 <script th:src="@{/layui.all.js}"></script>
+<script th:src="@{/tableSelect.js}"></script>
 <!--<script th:src="@{/lay/modules/formSelects-v4/formSelects-v4.js}"></script>-->
 
 <script type="text/html" id="barDemo">
@@ -51,6 +52,11 @@
 <!--            <option value="5">天津</option>-->
 <!--        </select>-->
 <!--    </div>-->
+</script>
+<script type="text/html" id="dict">
+    <div class="layui-input-inline">
+        <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input" id="demo">
+    </div>
 </script>
 
 
@@ -100,11 +106,22 @@
                 [ //表头
                     {type: 'checkbox', fixed: 'left'}
                     , {field: 'name', title: '列名'}
-                    , {field: 'type', title: '数据库类型'}
+                    // , {field: 'type', title: '数据库类型'}
                     , {field: 'javaType', title: 'java类型'}
                     , {field: 'show', title: '显示', templet: '#switchTpl', unresize: true}
-                    , {
-                    field: 'queryType', title: '查询类型',
+                    , {field: 'inputType', title: '控件',
+                    templet: function (d) {
+                        // 模板的实现方式也是多种多样，这里简单返回固定的
+                        return '<select name="city" lay-filter="testSelect" lay-verify="required" data-value="' + d.city + '" >\n' +
+                            '        <option value="">请选择</option>\n' +
+                            '        <option value="1" selected>input框</option>\n' +
+                            '        <option value="2" >text文本域</option>\n' +
+                            '        <option value="3">select选择</option>\n' +
+                            '        <option value="4">查找带回</option>\n' +
+                            '      </select>';
+                    }
+                }
+                    ,{field: 'queryType', title: '查询类型',
                     templet: function (d) {
                         // 模板的实现方式也是多种多样，这里简单返回固定的
                         return '<select name="city" lay-filter="testSelect" lay-verify="required" data-value="' + d.city + '" >\n' +
@@ -114,12 +131,67 @@
                             '      </select>';
                     }
                 }
+                    , {field: 'dict', title: '字典', templet:'#dict'}
                     , {field: 'remark', title: '注解'}
                     , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 200}
                 ]
             ]
         });
     });
+</script>
+<script type="text/javascript">
+    var form = layui.form;
+    form.render();
+    var tableSelect = layui.tableSelect;
+
+    tableSelect.render({
+        elem: '#demo',
+        searchKey: 'my',
+        checkedKey: 'id',
+        searchPlaceholder: '自定义文字和name',
+        table: {
+            url: 'table.json',
+            cols: [
+                [
+                    { type: 'checkbox' },
+                    { field: 'id', title: 'ID', width: 100 },
+                    { field: 'username', title: '姓名', width: 300 },
+                    { field: 'sex', title: '性别', width: 100 }
+                ]
+            ]
+        },
+        done: function (elem, data) {
+            var NEWJSON = []
+            layui.each(data.data, function (index, item) {
+                NEWJSON.push(item.username)
+            })
+            elem.val(NEWJSON.join(","))
+        }
+    })
+
+
+    tableSelect.render({
+        elem: '#demo',
+        checkedKey: 'id',
+        table: {
+            url: 'table.json',
+            cols: [
+                [
+                    { type: 'radio' },
+                    { field: 'id', title: 'ID' },
+                    { field: 'username', title: '姓名' },
+                    { field: 'sex', title: '性别' }
+                ]
+            ]
+        },
+        done: function (elem, data) {
+            var NEWJSON = []
+            layui.each(data.data, function (index, item) {
+                NEWJSON.push(item.username)
+            })
+            elem.val(NEWJSON.join(","))
+        }
+    })
 </script>
 </body>
 </html>

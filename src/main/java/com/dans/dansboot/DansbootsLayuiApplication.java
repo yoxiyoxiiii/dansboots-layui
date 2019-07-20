@@ -3,10 +3,8 @@ package com.dans.dansboot;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.dans.dansboot.entity.UserEntity;
 import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.annotation.MapperScans;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.info.ProjectInfoAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -64,7 +62,12 @@ public class DansbootsLayuiApplication {
 
     @RequestMapping("demo/tableSelected")
     public String tableSelected() {
-        return "demo/tableSelectedDemo";
+        return "demo/tableselectDemo";
+    }
+
+    @RequestMapping("demo/test")
+    public String test() {
+        return "demo/test";
     }
 
 }

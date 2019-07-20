@@ -22,6 +22,10 @@ public class ColumnDto implements Serializable {
     private String type;
     //java 类型
     private String javaType;
+    //设置控件类型
+    private String inputType;
+    //数据库字典类型
+    private String dict;
     //是否在列表中显示
     private boolean show;
     //注解

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" th:href="@{/css/layui.css}">
+    <script th:src="@{/layui.all.js}"></script>
+    <script th:src="@{/tableSelect.js}"></script>
+    <title>TableSelect</title>
+</head>
+<body>
+<!--<div class="layui-form-item">-->
+<!--    <label class="layui-form-label">单选</label>-->
+<!--    <div class="layui-input-inline">-->
+<!--        <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input" id="demo2">-->
+<!--    </div>-->
+<!--</div>-->
+<div class="layui-form">
+    <table class="layui-table">
+        <colgroup>
+            <col width="150">
+            <col width="150">
+            <col width="200">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>人物</th>
+            <th>民族</th>
+            <th>出场时间</th>
+            <th>格言</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>贤心</td>
+            <td>汉族</td>
+            <td>1989-10-14</td>
+            <td>
+                <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input" id="demo">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    var form = layui.form;
+    form.render();
+    var tableSelect = layui.tableSelect;
+
+    tableSelect.render({
+        elem: '#demo',
+        searchKey: 'my',
+        checkedKey: 'id',
+        searchPlaceholder: '自定义文字和name',
+        table: {
+            url: 'table.json',
+            cols: [
+                [
+                    { type: 'checkbox' },
+                    { field: 'id', title: 'ID', width: 100 },
+                    { field: 'username', title: '姓名', width: 300 },
+                    { field: 'sex', title: '性别', width: 100 }
+                ]
+            ]
+        },
+        done: function (elem, data) {
+            var NEWJSON = []
+            layui.each(data.data, function (index, item) {
+                NEWJSON.push(item.username)
+            })
+            elem.val(NEWJSON.join(","))
+        }
+    })
+
+
+    tableSelect.render({
+        elem: '#demo2',
+        checkedKey: 'id',
+        table: {
+            url: 'table.json',
+            cols: [
+                [
+                    { type: 'radio' },
+                    { field: 'id', title: 'ID' },
+                    { field: 'username', title: '姓名' },
+                    { field: 'sex', title: '性别' }
+                ]
+            ]
+        },
+        done: function (elem, data) {
+            var NEWJSON = []
+            layui.each(data.data, function (index, item) {
+                NEWJSON.push(item.username)
+            })
+            elem.val(NEWJSON.join(","))
+        }
+    })
+
+
+</script>
+</body>
+</html>
