@@ -1,12 +1,11 @@
 package com.dans.dansboot.service;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dans.dansboot.entity.MenuEntity;
 
-public interface MenuService extends IService<MenuEntity> {
+public interface IMenuService extends IService<MenuEntity> {
 
     /**
      * 条件分页查询

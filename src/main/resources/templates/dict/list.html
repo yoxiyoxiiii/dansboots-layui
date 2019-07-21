@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/header :: common_head(~{::title},~{::link})">
+<body>
+<div style="padding-left: 20px">
+    <div class="layui-collapse" lay-accordion="">
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title">搜索</h2>
+            <div class="layui-colla-content layui-show">
+                <div class="queryParams">
+                    字典名称:
+                    <div class="layui-inline">
+                        <input class="layui-input" name="codeName" id="codeName" autocomplete="off">
+                    </div>
+                    &nbsp;
+                    字典Code:
+                    <div class="layui-inline">
+                        <input class="layui-input" name="dictCode" id="code" autocomplete="off">
+                    </div>
+                    &nbsp;
+                    状态:
+                    <div class="layui-inline">
+                        <input class="layui-input" name="status" id="status" autocomplete="off">
+                    </div>
+
+                    <button class="layui-btn" data-type="reload">搜索</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <table id="menuListTable" class="layui-table" lay-filter="menuListTable"></table>
+</div>
+<div th:replace="/layout/script::js_footer(~{::title},~{::script})"></div>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">
+            <i class="layui-icon">&#xe608;</i> 添加
+        </button>
+        <!--        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+        <!--        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script>
+    var $ = layui.$;
+    layui.use('table', function(){
+        var table = layui.table;
+        //第一个实例
+        table.render({
+            elem: '#menuListTable'
+            ,toolbar: '#toolbarDemo'
+            ,url: '/api/dictcode/list' //数据接口
+            ,method: 'post'
+            ,type: 'json'
+            ,page: true //开启分页
+            ,id: 'testReload'
+            ,response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            ,parseData: function(res) { //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.data.records //解析数据列表
+                }
+            }
+            ,cols: [
+                [ //表头
+                    {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id', title: 'ID',  sort: true, fixed: 'left'}
+                    ,{field: 'codeName', title: '字典名称' }
+                    ,{field: 'dictCode', title: '字典Code' }
+                    ,{field: 'status', title: '状态'}
+                    ,{field: 'description', title: '描述信息'}
+                    ,{field: 'createdBy', title: '作者'}
+                    ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
+                ]
+            ]
+        });
+        //table.exportFile(init.config.id, data); //data 为该实例中的任意数量的数据
+
+        //头工具栏事件
+        table.on('toolbar(menuListTable)', function(obj){
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch(obj.event){
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：'+ data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(menuListTable)', function(obj){
+            var data = obj.data;
+            //console.log(obj)
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if(obj.event === 'edit'){
+                layer.prompt({
+                    formType: 2
+                    ,value: data.email
+                }, function(value, index){
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+        var $ = layui.$, active = {
+            reload: function(){
+                // var param = {id:demoReload.val()};
+                // var queryForm = $("#queryForm").serialize();
+                var params = {};
+                $('.queryParams .layui-input').each(function () {
+                    params[$(this).attr('name')] = $(this).val();
+                });
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        queryParam: JSON.stringify(params)
+                    }
+                }, 'data');
+            }
+        };
+
+        $('.queryParams .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+    //绑定回车键事件
+    document.onkeydown = function (event) {
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==13) {
+            $(".layui-btn").click();
+        }
+    };
+
+</script>
+</body>
+</html>

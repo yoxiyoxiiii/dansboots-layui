@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dans.dansboot.domain.MenuEntityVo;
 import com.dans.dansboot.entity.MenuEntity;
 import com.dans.dansboot.mapper.MenuEntityMapper;
-import com.dans.dansboot.service.MenuService;
+import com.dans.dansboot.service.IMenuService;
 import com.dans.dansboot.utils.Bean2MapUtils;
 import com.dans.dansboot.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class MenuServiceImpl extends ServiceImpl<MenuEntityMapper,MenuEntity> implements MenuService {
+public class MenuServiceImpl extends ServiceImpl<MenuEntityMapper,MenuEntity> implements IMenuService {
 
     /**
      * 分页查询

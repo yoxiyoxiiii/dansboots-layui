@@ -30,6 +30,7 @@ public class Result<T> implements Serializable {
    }
 
    public  enum CodeType{
+       DEFAULT_CODE(200),
        CODE_200(200),
        CODE_0(0),
        ;
@@ -50,7 +51,7 @@ public class Result<T> implements Serializable {
 
    public static<T> Result<T> ok(CodeType code ,T data) {
        if (StringUtils.isEmpty(code)) {
-           return new Result<>(code,"ok",true, data);
+           return new Result<>(CodeType.CODE_200,"ok",true, data);
        }
        return new Result<>(code,"ok",true, data);
    }

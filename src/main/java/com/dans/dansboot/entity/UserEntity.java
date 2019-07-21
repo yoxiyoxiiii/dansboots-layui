@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Data
 @Builder
 public class UserEntity implements Serializable {
+
     private String id;
     private String username;
     private String sex;

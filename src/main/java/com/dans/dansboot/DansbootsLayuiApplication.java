@@ -70,4 +70,9 @@ public class DansbootsLayuiApplication {
         return "demo/test";
     }
 
+    @RequestMapping("demo/fromDemo")
+    public String fromDemo() {
+        return "demo/fromDemo";
+    }
+
 }

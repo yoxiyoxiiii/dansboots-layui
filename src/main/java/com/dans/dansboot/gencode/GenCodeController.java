@@ -1,4 +1,4 @@
-package com.dans.dansboot.controller;
+package com.dans.dansboot.gencode;
 
 import com.dans.dansboot.domain.dto.ColumnDto;
 import com.dans.dansboot.domain.dto.TableDto;

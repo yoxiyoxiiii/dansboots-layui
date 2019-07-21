@@ -14,8 +14,8 @@ import java.util.Date;
 @TableName(value = "sys_menu")
 public class MenuEntity implements Serializable {
 
-  @TableId(type = IdType.ID_WORKER)
-  private String id;
+  @TableId(type = IdType.AUTO)
+  private Long id;
   private String name;
   private String url;
   private Integer level;
