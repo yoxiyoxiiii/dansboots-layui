@@ -55,6 +55,12 @@ public class Result<T> implements Serializable {
        }
        return new Result<>(code,"ok",true, data);
    }
+   public static Result ok(CodeType code) {
+       if (StringUtils.isEmpty(code)) {
+           return new Result<>(CodeType.CODE_200,"ok",true, null);
+       }
+       return new Result<>(code,"ok",true, null);
+   }
    public static<T> Result<T> error(int code, String msg) {
        return new Result<>(code,msg,false,null);
    }

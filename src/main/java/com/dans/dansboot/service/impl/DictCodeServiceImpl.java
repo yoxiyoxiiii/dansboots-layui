@@ -8,9 +8,11 @@ import com.dans.dansboot.mapper.DictCodeEntityMapper;
 import com.dans.dansboot.service.IDictCodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Transactional
 public class DictCodeServiceImpl extends ServiceImpl<DictCodeEntityMapper, DictCodeEntity> implements IDictCodeService {
     @Override
     public IPage<DictCodeEntity> pageAndQuery(Long page, Long limit, String queryParam) {

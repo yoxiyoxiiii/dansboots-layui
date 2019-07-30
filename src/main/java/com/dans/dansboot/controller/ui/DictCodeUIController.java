@@ -11,4 +11,11 @@ public class DictCodeUIController {
     public String list() {
         return "dict/list";
     }
+
+    @RequestMapping("addAndUpdate")
+    public String addAndUpdate() {
+        return "dict/addAndUpdate";
+    }
+
+
 }

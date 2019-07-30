@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/header :: common_head(~{::title},~{::link})">
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+    <legend>添加</legend>
+</fieldset>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">类型名称*</label>
+        <div class="layui-input-inline">
+            <input type="text" name="codeName" lay-verify="required" lay-reqtext="字典类型名称必填项，岂能为空？" autocomplete="off"
+                   placeholder="字典类型名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">字典编码*</label>
+        <div class="layui-input-inline">
+            <input type="text" name="dictCode" lay-verify="required" lay-reqtext="字典编码，岂能为空？" placeholder="code"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">作者*</label>
+        <div class="layui-input-inline">
+            <input type="text" name="createdBy" lay-verify="required" lay-reqtext="作者，岂能为空？" placeholder="作者"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述信息</label>
+        <div class="layui-input-inline">
+            <input type="text" name="description" lay-verify="description" placeholder="描述信息"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" id="addsub" lay-submit="" lay-filter="sub">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</body>
+<div th:replace="/layout/script::js_footer(~{::title},~{::script})"></div>
+<script>
+    layui.use(['form'], function () {
+        var $ = layui.$;
+        var form = layui.form;
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            data.elem.disabled=true;
+            $.ajax({
+                type: "post",
+                contentType: "application/json",
+                dataType: "json",
+                url: "/api/dictcode/add",
+                data: JSON.stringify(data.field),
+                // result 为请求的返回结果对象
+                success: function (result) {
+                    if (200 == result.code) {
+                        //在父级窗体弹出提示层
+                       var purl = parent.location;//父级页面地址
+                        parent.layer.msg('添加成功!', {time: 1000}, function () {
+                            //关闭添加页面
+                            var index = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(index);
+                            purl.reload();//重新加载父级页面
+                        });
+                    }
+                },
+                error: function () {
+                    data.elem.disabled=false;
+                    layer.alert('保存失败!', {
+                        title: '错误信息'
+                        , skin: 'layui-layer-molv' //样式类名
+                        , closeBtn: 0
+                    });
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</html>

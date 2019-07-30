@@ -33,13 +33,11 @@
     <table id="menuListTable" class="layui-table" lay-filter="menuListTable"></table>
 </div>
 <div th:replace="/layout/script::js_footer(~{::title},~{::script})"></div>
-<script type="text/html" id="toolbarDemo">
+<script type="text/html" id="toolbarAdd">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">
+        <button class="layui-btn layui-btn-sm" lay-event="add">
             <i class="layui-icon">&#xe608;</i> 添加
         </button>
-        <!--        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
-        <!--        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
     </div>
 </script>
 
@@ -47,15 +45,19 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
-
+<script type="text/html" id="codestatus">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="statusSwitch" {{ d.status == 1 ? 'checked' : '' }}>
+</script>
 <script>
     var $ = layui.$;
     layui.use('table', function(){
-        var table = layui.table;
+        var table = layui.table,
+            form = layui.form;
         //第一个实例
         table.render({
             elem: '#menuListTable'
-            ,toolbar: '#toolbarDemo'
+            ,toolbar: '#toolbarAdd'
             ,url: '/api/dictcode/list' //数据接口
             ,method: 'post'
             ,type: 'json'
@@ -78,7 +80,7 @@
                     ,{field: 'id', title: 'ID',  sort: true, fixed: 'left'}
                     ,{field: 'codeName', title: '字典名称' }
                     ,{field: 'dictCode', title: '字典Code' }
-                    ,{field: 'status', title: '状态'}
+                    ,{field: 'status', title: '状态',templet: '#codestatus', unresize: true}
                     ,{field: 'description', title: '描述信息'}
                     ,{field: 'createdBy', title: '作者'}
                     ,{fixed: 'right', title:'操作', toolbar: '#barDemo'}
@@ -87,10 +89,27 @@
         });
         //table.exportFile(init.config.id, data); //data 为该实例中的任意数量的数据
 
+        //监听性别操作
+        form.on('switch(statusSwitch)', function(obj){
+            console.log(obj);
+            layer.tips('状态' + '：'+ (obj.elem.checked?'启用':'禁用'), obj.othis);
+        });
         //头工具栏事件
         table.on('toolbar(menuListTable)', function(obj){
             var checkStatus = table.checkStatus(obj.config.id);
             switch(obj.event){
+                case 'add':
+                    var index = layer.open({
+                        type: 2,
+                        title: '添加字典类型',
+                        shadeClose: true,
+                        shade: false,
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['893px', '600px'],
+                        content: '/ui/dictcode/addAndUpdate',
+                    });
+                    layer.full(index);//全屏弹出
+                    break;
                 case 'getCheckData':
                     var data = checkStatus.data;
                     layer.alert(JSON.stringify(data));
